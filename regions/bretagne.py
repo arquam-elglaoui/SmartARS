@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Extracteur: Bretagne"""
+"""Extracteur: Bretagne - Page avec tous les RAA"""
 
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,7 +24,8 @@ def extraire_bretagne(mois_num, annee):
             continue
         
         text = a.get_text(strip=True)
-        if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+        # Vérifier texte ET URL (l'URL contient souvent l'année même si le texte ne l'a pas)
+        if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
             if href.startswith('/'):
                 href = BASE_URL + href
             if href not in pdf_links:

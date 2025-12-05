@@ -31,8 +31,9 @@ def extraire_occitanie(mois_num, annee):
             href = a['href']
             text = a.get_text(strip=True)
             
-            # Filtrage STRICT sur texte du lien ET URL seulement
-            if not (contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee)):
+            # Filtrage STRICT sur texte du lien ET URL
+            # page_annuelle=True pour le texte car parfois l'année n'est pas explicite
+            if not (contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee)):
                 continue
             
             if href.startswith('/'):

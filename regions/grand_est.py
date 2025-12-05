@@ -31,8 +31,8 @@ def extraire_grand_est(mois_num, annee):
         text = a.get_text(strip=True)
         
         # Filtrage STRICT: uniquement texte du lien ET URL
-        # (pas de parent_text qui peut contenir plusieurs mois)
-        if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+        # page_annuelle=True car les noms de fichiers n'ont pas toujours l'année
+        if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
             if href.startswith('/'):
                 href = BASE_URL + href
             if href not in pdf_links:

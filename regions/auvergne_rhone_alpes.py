@@ -37,8 +37,8 @@ def extraire_auvergne_rhone_alpes(mois_num, annee):
         text = a.get_text(strip=True)
         
         # Vérifier STRICTEMENT si c'est le bon mois/année
-        # On vérifie dans le texte ET dans l'URL
-        if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+        # On vérifie dans le texte (page_annuelle car pas toujours l'année) ET dans l'URL
+        if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
             if href.startswith('/'):
                 href = BASE_URL + href
             if href not in pdf_links:

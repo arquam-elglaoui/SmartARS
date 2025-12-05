@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Extracteur: Hauts-de-France"""
+"""Extracteur: Hauts-de-France - Page annuelle"""
 
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -11,6 +11,7 @@ BASE_URL = "https://www.prefectures-regions.gouv.fr"
 def extraire_hauts_de_france(mois_num, annee):
     log(f"Hauts-de-France - {mois_num:02d}/{annee}", "SEARCH")
     
+    # Page annuelle: les fichiers sont nommés "Recueil n°614 du 04 décembre" sans l'année
     url = f"{BASE_URL}/hauts-de-france/Documents-publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-l-Etat-en-Hauts-de-France-{annee}"
     soup = get_soup(url)
     if not soup:
@@ -24,7 +25,8 @@ def extraire_hauts_de_france(mois_num, annee):
             continue
         
         text = a.get_text(strip=True)
-        if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+        # page_annuelle=True car les noms de fichiers n'ont pas toujours l'année
+        if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
             if href.startswith('/'):
                 href = BASE_URL + href
             if href not in pdf_links:

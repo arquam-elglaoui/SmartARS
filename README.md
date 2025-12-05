@@ -233,7 +233,10 @@ Nom du fichier = nom du RAA original + `_EXTRACT.pdf`
 | Occitanie | `occitanie` |
 | Pays de la Loire | `pays-de-la-loire` |
 | Provence-Alpes-Côte d'Azur | `paca` ou `provence-alpes-cote-azur` |
-| La Réunion | `reunion` |
+| La Réunion | `reunion` ⚠️ |
+
+> **⚠️ Note La Réunion** : Cette région publie les RAA du mois le 1er ou 2 du mois **suivant**. 
+> Exemple : les RAA de décembre 2025 ne seront disponibles qu'à partir du 1er janvier 2026.
 
 ---
 
@@ -325,6 +328,53 @@ pip install -r requirements.txt --upgrade
 # Désactiver l'environnement
 deactivate
 ```
+
+---
+
+## 🖥️ Interface Graphique (GUI)
+
+SmartARS dispose d'une interface graphique moderne et intuitive.
+
+### Lancer l'interface
+
+```powershell
+python smartars_gui.py
+```
+
+### Fonctionnalités de l'interface
+
+- ✅ Sélection multiple des mois (cases à cocher)
+- ✅ Sélection de l'année (liste déroulante)
+- ✅ Sélection des régions (cases à cocher)
+- ✅ Boutons "Toutes" / "Aucune" pour sélection rapide
+- ✅ Zone de progression avec logs en temps réel
+- ✅ Barre de progression
+- ✅ Bouton "Ouvrir les résultats"
+- ✅ Bouton "Ouvrir Excel"
+
+---
+
+## 📦 Créer un exécutable (.exe)
+
+Pour distribuer SmartARS sans nécessiter Python :
+
+```powershell
+# 1. Activer l'environnement
+.\env\Scripts\activate
+
+# 2. Lancer le build
+python build_exe.py
+```
+
+L'exécutable sera créé dans `dist/SmartARS.exe` (~50-100 Mo).
+
+### Distribuer l'application
+
+1. Copier `SmartARS.exe` sur un **partage réseau**
+2. Ou l'envoyer par **email**
+3. Les utilisateurs double-cliquent → l'app se lance !
+
+**Aucune installation requise** sur les postes des utilisateurs.
 
 ---
 

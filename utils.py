@@ -13,7 +13,7 @@ import io
 import re
 import logging
 from bs4 import BeautifulSoup
-from config import HTTP_HEADERS, TIMEOUT_PAGE, TIMEOUT_PDF, KEYWORDS, KEYWORDS_REGEX, KEYWORDS_AUTORISATION, DELAY_BETWEEN_REQUESTS, MOIS_FR, MOIS_NOMS, MAX_RETRIES
+from config import HTTP_HEADERS, TIMEOUT_PAGE, TIMEOUT_PDF, KEYWORDS, KEYWORDS_REGEX, KEYWORDS_AUTORISATION, DELAY_BETWEEN_REQUESTS, MOIS_FR, MOIS_NOMS, MOIS_NOMS_URL, MAX_RETRIES
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -64,6 +64,44 @@ def normaliser_mois(mois):
     mois_clean = mois_str.replace('é', 'e').replace('û', 'u').replace('è', 'e')
     num = MOIS_FR.get(mois_str, MOIS_FR.get(mois_clean, 0))
     return mois_clean, num
+
+
+def get_mois_variantes(mois_num):
+    """
+    Retourne les deux variantes du nom de mois (avec et sans accents).
+    Utile pour essayer plusieurs URLs.
+    
+    Returns:
+        Liste de tuples [(nom_sans_accent, nom_avec_accent), ...]
+        Ex pour décembre: [("decembre", "décembre"), ("Decembre", "Décembre")]
+    """
+    sans_accent = MOIS_NOMS.get(mois_num, "")
+    avec_accent = MOIS_NOMS_URL.get(mois_num, "")
+    
+    return [
+        sans_accent,                    # decembre
+        avec_accent,                    # décembre
+        sans_accent.capitalize(),       # Decembre
+        avec_accent.capitalize(),       # Décembre
+    ]
+
+
+def get_soup_multi_urls(urls):
+    """
+    Essaie plusieurs URLs et retourne le premier soup valide.
+    Utile quand on ne sait pas si le site utilise des accents ou non.
+    
+    Args:
+        urls: Liste d'URLs à essayer
+        
+    Returns:
+        (soup, url_valide) ou (None, None)
+    """
+    for url in urls:
+        soup = get_soup(url)
+        if soup:
+            return soup, url
+    return None, None
 
 
 def telecharger_page(url, timeout=None, is_pdf=False, max_retries=None):
@@ -167,7 +205,7 @@ def contient_autre_mois(texte, mois_num, annee):
     Vérifie si le texte contient EXPLICITEMENT un mois DIFFÉRENT de celui recherché.
     Utilisé pour exclure les faux positifs.
     """
-    texte_lower = texte.lower()
+    texte_lower = normaliser_accents(texte.lower())
     annee_str = str(annee)
     
     # Liste des autres mois (tous sauf celui recherché)
@@ -187,7 +225,48 @@ def contient_autre_mois(texte, mois_num, annee):
     return False
 
 
-def contient_date_stricte(texte, mois_num, annee):
+def normaliser_accents(texte):
+    """Supprime les accents d'un texte pour faciliter la comparaison."""
+    accents = {
+        'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+        'à': 'a', 'â': 'a', 'ä': 'a',
+        'ù': 'u', 'û': 'u', 'ü': 'u',
+        'î': 'i', 'ï': 'i',
+        'ô': 'o', 'ö': 'o',
+        'ç': 'c',
+    }
+    for accent, sans in accents.items():
+        texte = texte.replace(accent, sans)
+    return texte
+
+
+def contient_mois(texte, mois_num):
+    """
+    Vérifie si le texte contient le mois (avec ou sans année).
+    Utile pour les pages annuelles où l'année est déjà dans l'URL.
+    
+    Ex: "Recueil n°614 du 04 décembre" → True pour mois_num=12
+    """
+    texte_lower = normaliser_accents(texte.lower())
+    mois_nom = MOIS_NOMS.get(mois_num, "")
+    mois_str = str(mois_num).zfill(2)
+    
+    # Patterns pour détecter le mois
+    patterns = [
+        rf'\d{{1,2}}\s+{mois_nom}',           # "04 decembre"
+        rf'{mois_nom}\s*:',                    # "Décembre :"
+        rf'/{mois_str}/',                      # "/12/"
+        rf'-{mois_str}-',                      # "-12-"
+        rf'{mois_nom}\s+\d{{4}}',              # "decembre 2025"
+    ]
+    
+    for pattern in patterns:
+        if re.search(pattern, texte_lower):
+            return True
+    return False
+
+
+def contient_date_stricte(texte, mois_num, annee, page_annuelle=False):
     """
     Vérifie STRICTEMENT si un texte contient une date du mois/année demandé.
     
@@ -199,12 +278,31 @@ def contient_date_stricte(texte, mois_num, annee):
     IMPORTANT: 
     - Le mois et l'année doivent être ADJACENTS (pas séparés)
     - Exclut les textes qui mentionnent explicitement un AUTRE mois
+    - Gère les accents (décembre = decembre)
+    
+    Args:
+        texte: Le texte à analyser
+        mois_num: Numéro du mois (1-12)
+        annee: Année (ex: 2025)
+        page_annuelle: Si True, accepte le mois seul sans année (pour pages annuelles)
     """
-    texte_lower = texte.lower()
+    # Normaliser le texte : minuscules + sans accents
+    texte_lower = normaliser_accents(texte.lower())
     annee_str = str(annee)
-    mois_nom = MOIS_NOMS.get(mois_num, "")
+    mois_nom = MOIS_NOMS.get(mois_num, "")  # déjà sans accents dans config
     mois_str = str(mois_num).zfill(2)  # "10" pour octobre
     mois_str_simple = str(mois_num)     # "10" ou "1"
+    
+    # Si page annuelle, on accepte le mois seul
+    if page_annuelle:
+        # Vérifier qu'on ne mentionne pas un AUTRE mois explicitement
+        autres_mois = [v for k, v in MOIS_NOMS.items() if k != mois_num]
+        for autre in autres_mois:
+            if re.search(rf'\d{{1,2}}\s+{autre}', texte_lower):
+                return False  # C'est un autre mois
+        # Vérifier que NOTRE mois est présent
+        if contient_mois(texte, mois_num):
+            return True
     
     # NOUVEAU: Si le texte mentionne explicitement un AUTRE mois, rejeter
     if contient_autre_mois(texte, mois_num, annee):

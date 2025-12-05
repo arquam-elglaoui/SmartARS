@@ -25,7 +25,8 @@ def extraire_bourgogne_franche_comte(mois_num, annee):
             continue
         
         text = a.get_text(strip=True)
-        if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+        # page_annuelle=True car c'est une page par année
+        if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
             if href.startswith('/'):
                 href = BASE_URL + href
             if href not in seen:
