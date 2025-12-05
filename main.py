@@ -352,6 +352,12 @@ def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger,
     pdfs_crees = 0
     nb_skipped = 0
     
+    # Log détaillé par région
+    log_region = []
+    log_region.append(f"=== {nom_region.upper()} - {mois_num:02d}/{annee} ===")
+    log_region.append(f"Date analyse: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    log_region.append("")
+    
     logger.info(f"Debut analyse: {nom_region}")
     log(f"══ {nom_region.upper().replace('-', ' ')} ══", "REGION")
     
@@ -362,10 +368,18 @@ def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger,
         if not pdf_urls:
             logger.warning(f"{nom_region}: Aucun PDF trouve")
             log(f"  Aucun PDF trouve pour ce mois", "WARNING")
+            log_region.append("RESULTAT: Aucun PDF trouve")
+            # Sauvegarder le log même si vide
+            sauvegarder_log_region(output_dir, nom_region, mois_num, annee, log_region)
             return resultats, 0, 0, 0
         
         logger.info(f"{nom_region}: {len(pdf_urls)} PDF a analyser")
         log(f"  {len(pdf_urls)} PDF trouve(s)", "INFO")
+        
+        log_region.append(f"PDFs TROUVES ({len(pdf_urls)}):")
+        for i, url in enumerate(pdf_urls, 1):
+            nom = url.split('/')[-1][:80]
+            log_region.append(f"  {i}. {nom}")
         
         # 2. Analyser chaque PDF
         for pdf_url in pdf_urls:
@@ -434,11 +448,79 @@ def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger,
         
         logger.info(f"{nom_region}: {nb_pages_total} page(s) pertinente(s), {pdfs_crees} PDF(s) cree(s)")
         
+        # Compléter le log de région
+        log_region.append("")
+        log_region.append(f"PDFs ANALYSES: {len(pdf_urls) - nb_skipped}")
+        log_region.append(f"PDFs IGNORES (cache): {nb_skipped}")
+        log_region.append(f"PAGES PERTINENTES: {nb_pages_total}")
+        log_region.append(f"PDFs EXTRAITS CREES: {pdfs_crees}")
+        log_region.append("")
+        if resultats:
+            log_region.append("AUTORISATIONS TROUVEES:")
+            for r in resultats:
+                log_region.append(f"  - Page {r['Page']}: {r['Equipements']} ({r['Source']})")
+        else:
+            log_region.append("AUTORISATIONS TROUVEES: Aucune")
+        
+        # Sauvegarder le log de région
+        sauvegarder_log_region(output_dir, nom_region, mois_num, annee, log_region)
+        
     except Exception as e:
         logger.error(f"{nom_region}: Erreur - {e}")
         log(f"Erreur {nom_region}: {e}", "ERROR")
+        log_region.append(f"ERREUR: {e}")
+        sauvegarder_log_region(output_dir, nom_region, mois_num, annee, log_region)
     
     return resultats, nb_pages_total, pdfs_crees, nb_skipped
+
+
+def sauvegarder_log_region(output_dir, nom_region, mois_num, annee, log_lines):
+    """
+    Sauvegarde le log détaillé d'une région dans un fichier texte.
+    Le fichier se cumule à chaque exécution (mode append).
+    
+    Nom du fichier: log_{region_abrege}_{mois}_{annee}.txt
+    Ex: log_aura_decembre_2025.txt
+    """
+    try:
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Créer un nom abrégé pour la région
+        abreviations = {
+            "auvergne-rhone-alpes": "aura",
+            "bourgogne-franche-comte": "bfc",
+            "bretagne": "bzh",
+            "centre-val-de-loire": "cvl",
+            "corse": "cors",
+            "grand-est": "gest",
+            "guadeloupe": "guad",
+            "guyane": "guy",
+            "hauts-de-france": "hdf",
+            "ile-de-france": "idf",
+            "martinique": "mart",
+            "normandie": "norm",
+            "nouvelle-aquitaine": "naq",
+            "occitanie": "occ",
+            "pays-de-la-loire": "pdl",
+            "paca": "paca",
+            "reunion": "reu",
+        }
+        
+        region_abrege = abreviations.get(nom_region, nom_region[:4])
+        mois_nom = MOIS_NOMS.get(mois_num, str(mois_num))
+        
+        log_filename = f"log_{region_abrege}_{mois_nom}_{annee}.txt"
+        log_path = os.path.join(output_dir, log_filename)
+        
+        # Mode append : ajoute au fichier existant
+        with open(log_path, 'a', encoding='utf-8') as f:
+            # Séparateur entre les exécutions
+            f.write("\n" + "=" * 60 + "\n")
+            f.write('\n'.join(log_lines))
+            f.write("\n")
+            
+    except Exception as e:
+        print(f"⚠️ Impossible de sauvegarder le log region: {e}")
 
 
 # === MENU INTERACTIF ===

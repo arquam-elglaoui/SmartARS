@@ -293,13 +293,24 @@ def contient_date_stricte(texte, mois_num, annee, page_annuelle=False):
     mois_str = str(mois_num).zfill(2)  # "10" pour octobre
     mois_str_simple = str(mois_num)     # "10" ou "1"
     
-    # Si page annuelle, on accepte le mois seul
+    # Si page annuelle, on accepte le mois seul MAIS on rejette si une autre année est explicite
     if page_annuelle:
+        # IMPORTANT: Si le texte contient explicitement une AUTRE année, rejeter
+        # Ex: "04 décembre 2024" doit être rejeté si on cherche 2025
+        annees_autres = [str(a) for a in range(2016, 2030) if a != annee]
+        for autre_annee in annees_autres:
+            # Vérifier si notre mois est mentionné avec une autre année
+            if re.search(rf'\d{{1,2}}\s+{mois_nom}\s+{autre_annee}', texte_lower):
+                return False  # C'est notre mois mais pas la bonne année
+            if re.search(rf'{mois_nom}\s+{autre_annee}', texte_lower):
+                return False  # "décembre 2024" alors qu'on cherche 2025
+        
         # Vérifier qu'on ne mentionne pas un AUTRE mois explicitement
         autres_mois = [v for k, v in MOIS_NOMS.items() if k != mois_num]
         for autre in autres_mois:
             if re.search(rf'\d{{1,2}}\s+{autre}', texte_lower):
                 return False  # C'est un autre mois
+        
         # Vérifier que NOTRE mois est présent
         if contient_mois(texte, mois_num):
             return True
