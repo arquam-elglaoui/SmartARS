@@ -173,11 +173,16 @@ Documents/SmartARS/
 ├── SmartARS_Historique.xlsx          # ← FICHIER PRINCIPAL (toutes les données)
 ├── SmartARS.log                       # Log global
 └── results/
-    └── 2025_novembre/                 # Un dossier par mois analysé
+    └── 2025_decembre/                 # Un dossier par mois analysé
+        ├── smartars.log               # Log de l'exécution
+        ├── auvergne-rhone-alpes/
+        │   └── log_aura_decembre_2025.txt   # Log détaillé de la région
         ├── bretagne/
+        │   ├── log_bzh_decembre_2025.txt    # Log détaillé
         │   ├── RAA_029_2025_0042_EXTRACT.pdf
         │   └── RAA_029_2025_0045_EXTRACT.pdf
         ├── ile-de-france/
+        │   ├── log_idf_decembre_2025.txt    # Log détaillé
         │   └── RAA_075_2025_0123_EXTRACT.pdf
         └── ...
 ```
@@ -297,15 +302,47 @@ SmartARS/
 
 ## 📝 Logs
 
-Les logs détaillés sont dans :
-- `C:\Users\TON_NOM\Documents\SmartARS\SmartARS.log`
+### Log global
+- `C:\Users\TON_NOM\Documents\SmartARS\results\{annee}_{mois}\smartars.log`
 
-Exemple de log :
+### Logs détaillés par région
+Chaque région a son propre fichier log avec un nom parlant :
+
+| Région | Fichier log |
+|--------|-------------|
+| Auvergne-Rhône-Alpes | `log_aura_decembre_2025.txt` |
+| Bourgogne-Franche-Comté | `log_bfc_decembre_2025.txt` |
+| Bretagne | `log_bzh_decembre_2025.txt` |
+| Centre-Val de Loire | `log_cvl_decembre_2025.txt` |
+| Île-de-France | `log_idf_decembre_2025.txt` |
+| Hauts-de-France | `log_hdf_decembre_2025.txt` |
+| ... | ... |
+
+**Contenu du log région** :
+- Liste des PDFs trouvés avec leurs URLs
+- PDFs analysés vs ignorés (cache)
+- Autorisations trouvées (page + équipements)
+- **Se cumule** : chaque exécution ajoute une entrée datée
+
+Exemple :
 ```
-2025-12-05 14:30:15 - INFO - === Analyse: bretagne pour novembre 2025 ===
-2025-12-05 14:30:18 - INFO - bretagne: 5 PDF a analyser
-2025-12-05 14:30:45 - INFO - RAA_029_2025_0042.pdf: 2 pages pertinentes
-2025-12-05 14:31:02 - INFO - bretagne: 3 pages pertinentes dans 2 PDFs
+============================================================
+=== BRETAGNE - 12/2025 ===
+Date analyse: 2025-12-05 15:03:34
+
+PDFs TROUVES (12):
+  1. recueil-r53-2025-160-recueil-des-actes-administratifs.pdf
+  2. recueil-r53-2025-159-recueil-des-actes-administratifs.pdf
+  ...
+
+PDFs ANALYSES: 12
+PDFs IGNORES (cache): 0
+PAGES PERTINENTES: 3
+PDFs EXTRAITS CREES: 2
+
+AUTORISATIONS TROUVEES:
+  - Page 45: IRM, Scanner (recueil-r53-2025-160...)
+  - Page 78: TEP (recueil-r53-2025-159...)
 ```
 
 ---
