@@ -443,6 +443,39 @@ def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger,
 
 # === MENU INTERACTIF ===
 
+def parser_mois_multiples(mois_input):
+    """
+    Parse une entrée de mois (peut être multiple, séparée par virgules).
+    Ex: "10,11" ou "octobre,novembre" ou "10,novembre"
+    Retourne une liste de numéros de mois.
+    """
+    mois_list = []
+    for m in mois_input.split(","):
+        m = m.strip()
+        if not m:
+            continue
+        _, mois_num = normaliser_mois(m)
+        if mois_num and mois_num not in mois_list:
+            mois_list.append(mois_num)
+    return mois_list
+
+
+def parser_annees_multiples(annee_input):
+    """
+    Parse une entrée d'années (peut être multiple, séparée par virgules).
+    Ex: "2024,2025"
+    Retourne une liste d'années.
+    """
+    annees = []
+    for a in annee_input.split(","):
+        a = a.strip()
+        if a.isdigit():
+            annee = int(a)
+            if 2000 <= annee <= 2100 and annee not in annees:
+                annees.append(annee)
+    return annees
+
+
 def afficher_menu():
     """Affiche un menu interactif pour faciliter l'utilisation."""
     print()
@@ -454,22 +487,36 @@ def afficher_menu():
     
     # Mois
     print("Mois disponibles:")
-    mois_list = list(MOIS_FR.keys())[:12]  # Uniquement les noms uniques
     for i, m in enumerate(["janvier", "fevrier", "mars", "avril", "mai", "juin", 
                            "juillet", "aout", "septembre", "octobre", "novembre", "decembre"], 1):
         print(f"  {i:2}. {m.capitalize()}")
     print()
+    print("  Astuce: Plusieurs mois possibles avec virgule (ex: 10,11)")
+    print()
     
-    mois_input = input("Entrez le mois (nom ou numero): ").strip()
+    mois_input = input("Entrez le(s) mois (ex: 11 ou 10,11,12): ").strip()
     if not mois_input:
         print("Annule.")
         return None, None, None
     
+    mois_list = parser_mois_multiples(mois_input)
+    if not mois_list:
+        print("Mois invalide.")
+        return None, None, None
+    
     # Année
     annee_defaut = datetime.datetime.now().year
-    annee_input = input(f"Entrez l'annee [{annee_defaut}]: ").strip()
+    print()
+    print(f"  Astuce: Plusieurs annees possibles avec virgule (ex: 2024,2025)")
+    print()
+    annee_input = input(f"Entrez l'annee(s) [{annee_defaut}]: ").strip()
     if not annee_input:
         annee_input = str(annee_defaut)
+    
+    annees_list = parser_annees_multiples(annee_input)
+    if not annees_list:
+        print("Annee invalide.")
+        return None, None, None
     
     # Régions
     print()
@@ -477,7 +524,7 @@ def afficher_menu():
     regions_list = sorted(EXTRACTEURS.keys())
     for i, r in enumerate(regions_list, 1):
         print(f"  {i:2}. {r}")
-    print(f"  0. TOUTES les regions")
+    print(f"   0. TOUTES les regions")
     print()
     
     regions_input = input("Entrez les numeros des regions (ex: 1,3,5) ou 0 pour toutes: ").strip()
@@ -491,7 +538,22 @@ def afficher_menu():
         except:
             regions = None
     
-    return mois_input, annee_input, regions
+    # Résumé de la sélection
+    mois_noms = [MOIS_NOMS.get(m, str(m)) for m in mois_list]
+    print()
+    print("-" * 40)
+    print(f"  Mois:    {', '.join(mois_noms)}")
+    print(f"  Annees:  {', '.join(map(str, annees_list))}")
+    print(f"  Regions: {', '.join(regions) if regions else 'TOUTES'}")
+    print("-" * 40)
+    print()
+    
+    confirm = input("Lancer l'analyse ? (O/n): ").strip().lower()
+    if confirm in ['n', 'non', 'no']:
+        print("Annule.")
+        return None, None, None
+    
+    return mois_list, annees_list, regions
 
 
 # === FONCTION PRINCIPALE ===
@@ -607,9 +669,20 @@ def main():
     
     # Mode interactif si pas d'arguments
     if len(args) == 0:
-        mois, annee, regions = afficher_menu()
-        if mois and annee:
-            run_bot(mois, annee, regions)
+        mois_list, annees_list, regions = afficher_menu()
+        if mois_list and annees_list:
+            # Boucler sur toutes les combinaisons mois/année
+            total_combos = len(mois_list) * len(annees_list)
+            combo_num = 0
+            for annee in annees_list:
+                for mois_num in mois_list:
+                    combo_num += 1
+                    if total_combos > 1:
+                        print()
+                        print("*" * 60)
+                        print(f"*  Analyse {combo_num}/{total_combos}: {MOIS_NOMS.get(mois_num)} {annee}")
+                        print("*" * 60)
+                    run_bot(mois_num, annee, regions)
         return
     
     # Mode ligne de commande
@@ -617,9 +690,12 @@ def main():
         print("Usage: python main.py <mois> <annee> [regions...]")
         print()
         print("Exemples:")
-        print("  python main.py                    # Mode interactif")
-        print("  python main.py novembre 2025      # Toutes regions")
-        print("  python main.py 11 2025 bretagne   # Region specifique")
+        print("  python main.py                         # Mode interactif")
+        print("  python main.py novembre 2025           # Toutes regions")
+        print("  python main.py 11 2025 bretagne        # Region specifique")
+        print("  python main.py 10,11 2025              # Plusieurs mois")
+        print("  python main.py 11 2024,2025            # Plusieurs annees")
+        print("  python main.py 10,11,12 2024,2025      # Plusieurs mois ET annees")
         print()
         print("Options:")
         print("  --force    Ignorer le cache et re-analyser tout")
@@ -631,8 +707,19 @@ def main():
         print(f"Sortie: ~/Documents/SmartARS/results/{{annee}}_{{mois}}/{{region}}/")
         return
     
-    mois = args[0]
-    annee = args[1]
+    mois_input = args[0]
+    annee_input = args[1]
+    
+    # Parser les mois et années multiples
+    mois_list = parser_mois_multiples(mois_input)
+    annees_list = parser_annees_multiples(annee_input)
+    
+    if not mois_list:
+        print(f"Erreur: mois invalide '{mois_input}'")
+        return
+    if not annees_list:
+        print(f"Erreur: annee invalide '{annee_input}'")
+        return
     
     # Options
     skip_cache = "--force" in args
@@ -642,7 +729,18 @@ def main():
     if not regions:
         regions = None
     
-    run_bot(mois, annee, regions, skip_cache)
+    # Boucler sur toutes les combinaisons mois/année
+    total_combos = len(mois_list) * len(annees_list)
+    combo_num = 0
+    for annee in annees_list:
+        for mois_num in mois_list:
+            combo_num += 1
+            if total_combos > 1:
+                print()
+                print("*" * 60)
+                print(f"*  Analyse {combo_num}/{total_combos}: {MOIS_NOMS.get(mois_num)} {annee}")
+                print("*" * 60)
+            run_bot(mois_num, annee, regions, skip_cache)
 
 
 if __name__ == "__main__":

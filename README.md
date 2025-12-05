@@ -77,19 +77,40 @@ python main.py
 
 Un menu s'affiche :
 ```
-=== SmartARS - Extraction des autorisations EML ===
+============================================================
+   SmartARS - Robot de Veille Reglementaire
+============================================================
 
-Entrez le mois (nom ou numero 1-12): novembre
-Entrez l'annee (ex: 2025): 2025
+Mois disponibles:
+   1. Janvier
+   2. Fevrier
+   ...
+  11. Novembre
+  12. Decembre
+
+  Astuce: Plusieurs mois possibles avec virgule (ex: 10,11)
+
+Entrez le(s) mois (ex: 11 ou 10,11,12): 10,11
+
+  Astuce: Plusieurs annees possibles avec virgule (ex: 2024,2025)
+
+Entrez l'annee(s) [2025]: 2025
 
 Regions disponibles:
-  1. auvergne-rhone-alpes
-  2. bourgogne-franche-comte
-  ...
+   1. auvergne-rhone-alpes
+   2. bourgogne-franche-comte
+   ...
+   0. TOUTES les regions
 
-Entrez les numeros des regions (ex: 1,3,5) ou 'all' pour toutes: all
+Entrez les numeros des regions (ex: 1,3,5) ou 0 pour toutes: 1,3,10
 
-Lancement de l'analyse...
+----------------------------------------
+  Mois:    octobre, novembre
+  Annees:  2025
+  Regions: auvergne-rhone-alpes, bretagne, ile-de-france
+----------------------------------------
+
+Lancer l'analyse ? (O/n): o
 ```
 
 ---
@@ -97,17 +118,23 @@ Lancement de l'analyse...
 ### Option 2 : Ligne de commande directe
 
 ```powershell
-# Analyser TOUTES les régions pour novembre 2025
-python main.py novembre 2025
-
-# Avec le numéro du mois
+# UN mois, UNE année, TOUTES les régions
 python main.py 11 2025
 
-# Seulement certaines régions
-python main.py novembre 2025 bretagne ile-de-france paca
+# PLUSIEURS mois (séparés par virgule)
+python main.py 10,11,12 2025
+
+# PLUSIEURS années (séparés par virgule)
+python main.py 11 2024,2025
+
+# PLUSIEURS mois ET années (toutes les combinaisons)
+python main.py 10,11 2024,2025
+
+# Certaines régions seulement
+python main.py 11 2025 bretagne ile-de-france paca
 
 # Forcer la ré-analyse (ignorer le cache)
-python main.py novembre 2025 --force
+python main.py 11 2025 --force
 ```
 
 ---
@@ -115,10 +142,20 @@ python main.py novembre 2025 --force
 ### Option 3 : Tester une seule région
 
 ```powershell
-python main.py novembre 2025 bretagne
+python main.py 11 2025 bretagne
 ```
 
 Utile pour vérifier que tout fonctionne avant de lancer toutes les régions.
+
+---
+
+### Syntaxe des paramètres
+
+| Paramètre | Format | Exemples |
+|-----------|--------|----------|
+| **Mois** | Numéro ou nom, virgule pour multiples | `11` ou `novembre` ou `10,11,12` |
+| **Année** | AAAA, virgule pour multiples | `2025` ou `2024,2025` |
+| **Régions** | Noms séparés par espaces | `bretagne paca normandie` |
 
 ---
 
