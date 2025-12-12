@@ -12,6 +12,9 @@ import fitz  # PyMuPDF
 import io
 import re
 import logging
+#region agent log
+import json
+#endregion
 from bs4 import BeautifulSoup
 from config import HTTP_HEADERS, TIMEOUT_PAGE, TIMEOUT_PDF, KEYWORDS, KEYWORDS_REGEX, KEYWORDS_AUTORISATION, DELAY_BETWEEN_REQUESTS, MOIS_FR, MOIS_NOMS, MOIS_NOMS_URL, MAX_RETRIES
 
@@ -20,6 +23,25 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # Logger
 logger = logging.getLogger("SmartARS")
 
+#region agent log
+LOG_PATH = r"c:\Program Files\SmartARS\.cursor\debug.log"
+
+def _log_debug(hypothesis_id: str, location: str, message: str, data: dict):
+    payload = {
+        "sessionId": "debug-session",
+        "runId": "pre-fix",
+        "hypothesisId": hypothesis_id,
+        "location": location,
+        "message": message,
+        "data": data,
+        "timestamp": int(time.time() * 1000),
+    }
+    try:
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(json.dumps(payload, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+#endregion
 
 def log(message, level="INFO"):
     """
@@ -397,6 +419,20 @@ def analyser_pdf_pages(pdf_bytes):
                 # 3. Extraire les infos
                 info = extraire_infos_page(text, equipements_trouves)
                 
+#region agent log
+                _log_debug(
+                    "H1",
+                    "utils.analyser_pdf_pages",
+                    "page_scan",
+                    {
+                        "page_num": page_num,
+                        "equipements": equipements_trouves,
+                        "est_autorisation": est_autorisation,
+                        "text_len": len(text),
+                    },
+                )
+#endregion
+
                 pages_pertinentes.append({
                     "page_num": page_num,
                     "equipements": equipements_trouves,
@@ -434,6 +470,18 @@ def extraire_infos_page(text, equipements):
     match_cp = re.search(r'\(?\s*(\d{5})\s*\)?', text)
     if match_cp:
         info["ville"] = match_cp.group(1)
+#region agent log
+    _log_debug(
+        "H2",
+        "utils.extraire_infos_page",
+        "etab_cp",
+        {
+            "etablissement": info.get("etablissement", ""),
+            "cp": info.get("ville", ""),
+            "has_cp": bool(match_cp),
+        },
+    )
+#endregion
     
     return info
 

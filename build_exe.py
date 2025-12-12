@@ -36,8 +36,10 @@ def build():
         "--noconfirm",                # Pas de confirmation
         # Icône (optionnel)
         # "--icon=icon.ico",
-        # Ajouter les modules nécessaires
+        
+        # === IMPORTS EXPLICITES DES RÉGIONS ===
         "--hidden-import=regions",
+        "--hidden-import=regions.__init__",
         "--hidden-import=regions.auvergne_rhone_alpes",
         "--hidden-import=regions.bourgogne_franche_comte",
         "--hidden-import=regions.bretagne",
@@ -55,22 +57,49 @@ def build():
         "--hidden-import=regions.pays_de_la_loire",
         "--hidden-import=regions.provence_alpes_cote_azur",
         "--hidden-import=regions.reunion",
+        
+        # === MODULES PRINCIPAUX ===
+        "--hidden-import=config",
+        "--hidden-import=utils",
+        "--hidden-import=main",
+        
+        # === BIBLIOTHÈQUES EXTERNES ===
         "--hidden-import=customtkinter",
         "--hidden-import=PIL",
+        "--hidden-import=PIL.Image",
         "--hidden-import=pandas",
         "--hidden-import=openpyxl",
         "--hidden-import=fitz",
+        "--hidden-import=PyMuPDF",
         "--hidden-import=requests",
         "--hidden-import=bs4",
-        # Collecter les données de customtkinter
+        "--hidden-import=beautifulsoup4",
+        "--hidden-import=urllib3",
+        "--hidden-import=logging",
+        "--hidden-import=json",
+        "--hidden-import=hashlib",
+        "--hidden-import=datetime",
+        "--hidden-import=io",
+        "--hidden-import=os",
+        "--hidden-import=sys",
+        "--hidden-import=time",
+        "--hidden-import=re",
+        
+        # === COLLECTER LES DONNÉES ===
         "--collect-data=customtkinter",
+        "--collect-all=customtkinter",
+        "--collect-all=PIL",
+        
+        # === OPTIONS DE SÉCURITÉ ===
+        "--noupx",  # Désactiver UPX (peut causer des problèmes avec antivirus)
+        
         # Script principal
         script_path
     ]
     
     print("Commande:", " ".join(cmd))
     print()
-    print("⏳ Construction en cours (peut prendre quelques minutes)...")
+    print("Construction en cours (peut prendre quelques minutes)...")
     print()
     
     # Exécuter PyInstaller
@@ -80,7 +109,7 @@ def build():
         exe_path = os.path.join(os.path.dirname(__file__), "dist", "SmartARS.exe")
         print()
         print("=" * 60)
-        print("✅ SUCCÈS !")
+        print("SUCCES !")
         print("=" * 60)
         print()
         print(f"Exécutable créé : {exe_path}")
@@ -95,7 +124,7 @@ def build():
         os.startfile(os.path.join(os.path.dirname(__file__), "dist"))
     else:
         print()
-        print("❌ Erreur lors de la construction")
+        print("ERREUR: Erreur lors de la construction")
         print("Vérifiez les messages d'erreur ci-dessus")
     
     return result.returncode

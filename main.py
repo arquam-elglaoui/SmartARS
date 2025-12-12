@@ -336,7 +336,7 @@ def creer_pdf_par_raa(pdf_bytes, pages_pertinentes, output_dir, nom_fichier_orig
 
 # === ANALYSE D'UNE RÉGION ===
 
-def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger, cache, skip_cache=False):
+def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger, cache, skip_cache=False, should_stop=None):
     """
     Analyse une région et génère les fichiers de sortie.
     
@@ -383,6 +383,12 @@ def analyser_region(nom_region, extracteur, mois_num, annee, output_dir, logger,
         
         # 2. Analyser chaque PDF
         for pdf_url in pdf_urls:
+            # Vérifier si l'arrêt a été demandé
+            if should_stop and should_stop():
+                logger.info(f"{nom_region}: Analyse arretee par l'utilisateur")
+                log(f"  Analyse arretee", "WARNING")
+                break
+            
             # Vérifier le cache (anti-doublons)
             if not skip_cache and is_already_processed(cache, pdf_url, mois_num, annee):
                 nb_skipped += 1
@@ -640,7 +646,7 @@ def afficher_menu():
 
 # === FONCTION PRINCIPALE ===
 
-def run_bot(mois, annee, regions=None, skip_cache=False):
+def run_bot(mois, annee, regions=None, skip_cache=False, should_stop=None):
     """Lance le robot."""
     
     mois_nom, mois_num = normaliser_mois(mois)
@@ -678,13 +684,19 @@ def run_bot(mois, annee, regions=None, skip_cache=False):
     stats = {"total_pages": 0, "total_pdfs": 0, "par_region": {}, "skipped": 0, "erreurs": []}
     
     for nom, extracteur in extracteurs.items():
+        # Vérifier si l'arrêt a été demandé
+        if should_stop and should_stop():
+            logger.info("Analyse arretee par l'utilisateur")
+            log("Analyse arretee", "WARNING")
+            break
+        
         print()
         
         # Créer le dossier de sortie pour cette région
         output_dir = get_output_dir(annee, mois_num, nom)
         
         resultats, nb_pages, nb_pdfs, nb_skipped = analyser_region(
-            nom, extracteur, mois_num, annee, output_dir, logger, cache, skip_cache
+            nom, extracteur, mois_num, annee, output_dir, logger, cache, skip_cache, should_stop
         )
         
         tous_resultats.extend(resultats)

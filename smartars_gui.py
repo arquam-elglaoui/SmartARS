@@ -21,6 +21,30 @@ from config import MOIS_FR
 from utils import normaliser_mois, MOIS_NOMS
 from regions import EXTRACTEURS
 
+# === FORCER L'IMPORT DE TOUTES LES RÉGIONS (pour PyInstaller) ===
+# Cela garantit que tous les modules sont embarqués dans l'exe
+try:
+    import regions.auvergne_rhone_alpes
+    import regions.bourgogne_franche_comte
+    import regions.bretagne
+    import regions.centre_val_de_loire
+    import regions.corse
+    import regions.grand_est
+    import regions.guadeloupe
+    import regions.guyane
+    import regions.hauts_de_france
+    import regions.ile_de_france
+    import regions.martinique
+    import regions.normandie
+    import regions.nouvelle_aquitaine
+    import regions.occitanie
+    import regions.pays_de_la_loire
+    import regions.provence_alpes_cote_azur
+    import regions.reunion
+except ImportError:
+    # En cas d'erreur, on continue quand même
+    pass
+
 # Configuration de l'apparence
 ctk.set_appearance_mode("dark")  # "dark", "light", "system"
 ctk.set_default_color_theme("blue")
@@ -43,7 +67,9 @@ class SmartARSApp(ctk.CTk):
         self.mois_vars = {}
         self.region_vars = {}
         self.is_running = False
+        self.should_stop = False
         self.log_queue = queue.Queue()
+        self.analysis_thread = None
         
         # Créer l'interface
         self.create_widgets()
@@ -301,6 +327,18 @@ class SmartARSApp(ctk.CTk):
         )
         self.start_btn.pack(side="left", expand=True, fill="x", padx=5)
         
+        # Bouton Arrêter (initialement caché)
+        self.stop_btn = ctk.CTkButton(
+            btn_frame,
+            text="⏹️ Arrêter la recherche",
+            font=ctk.CTkFont(size=16, weight="bold"),
+            height=45,
+            fg_color="red",
+            hover_color="darkred",
+            command=self.stop_analysis
+        )
+        # Ne pas pack pour l'instant, sera affiché pendant l'analyse
+        
         # Bouton Ouvrir résultats
         self.results_btn = ctk.CTkButton(
             btn_frame,
@@ -396,17 +434,30 @@ class SmartARSApp(ctk.CTk):
         self.log_text.delete("1.0", "end")
         self.progress_bar.set(0)
         
-        # Désactiver le bouton
+        # Réinitialiser le flag d'arrêt
+        self.should_stop = False
+        
+        # Cacher le bouton Lancer et afficher le bouton Arrêter
         self.is_running = True
-        self.start_btn.configure(state="disabled", text="⏳ Analyse en cours...")
+        self.start_btn.pack_forget()  # Cacher le bouton Lancer
+        self.stop_btn.pack(side="left", expand=True, fill="x", padx=5)  # Afficher le bouton Arrêter
         
         # Lancer dans un thread
-        thread = threading.Thread(
+        self.analysis_thread = threading.Thread(
             target=self.run_analysis,
             args=(mois_selectionnes, annee, regions_selectionnees)
         )
-        thread.daemon = True
-        thread.start()
+        self.analysis_thread.daemon = True
+        self.analysis_thread.start()
+    
+    def stop_analysis(self):
+        """Arrête l'analyse en cours."""
+        if not self.is_running:
+            return
+        
+        if messagebox.askyesno("Arrêter", "Voulez-vous vraiment arrêter l'analyse en cours ?"):
+            self.should_stop = True
+            self.log("\n⚠️ Arrêt demandé... Fin de l'analyse en cours...")
     
     def run_analysis(self, mois_list, annee, regions):
         """Exécute l'analyse (dans un thread séparé)."""
@@ -417,6 +468,13 @@ class SmartARSApp(ctk.CTk):
             total_combos = len(mois_list)
             
             for i, mois_num in enumerate(mois_list):
+                # Vérifier si l'arrêt a été demandé
+                if self.should_stop:
+                    self.log(f"\n{'='*50}")
+                    self.log("⏹️ ANALYSE ARRÊTÉE PAR L'UTILISATEUR")
+                    self.log(f"{'='*50}")
+                    break
+                
                 mois_nom = MOIS_NOMS.get(mois_num, str(mois_num))
                 self.log(f"\n{'='*50}")
                 self.log(f"📅 Analyse: {mois_nom} {annee}")
@@ -435,39 +493,54 @@ class SmartARSApp(ctk.CTk):
                 sys.stdout = OutputRedirector(self.log)
                 
                 try:
-                    run_bot(mois_num, annee, regions)
+                    # Passer le callback should_stop à run_bot
+                    run_bot(mois_num, annee, regions, should_stop=lambda: self.should_stop)
                 except Exception as e:
-                    self.log(f"❌ Erreur: {str(e)}")
+                    if not self.should_stop:
+                        self.log(f"❌ Erreur: {str(e)}")
                 finally:
                     sys.stdout = old_stdout
+                
+                # Vérifier à nouveau après chaque mois
+                if self.should_stop:
+                    self.log(f"\n{'='*50}")
+                    self.log("⏹️ ANALYSE ARRÊTÉE PAR L'UTILISATEUR")
+                    self.log(f"{'='*50}")
+                    break
                 
                 # Progression
                 progress = (i + 1) / total_combos
                 self.after(0, lambda p=progress: self.progress_bar.set(p))
             
-            self.log(f"\n{'='*50}")
-            self.log("✅ ANALYSE TERMINÉE !")
-            self.log(f"{'='*50}")
-            self.log(f"\n📂 Résultats: {BASE_DIR}")
-            self.log(f"📊 Excel: {HISTORIQUE_EXCEL}")
-            
-            # Notification
-            self.after(0, lambda: messagebox.showinfo(
-                "Terminé",
-                f"Analyse terminée !\n\nRésultats dans :\n{BASE_DIR}"
-            ))
+            if not self.should_stop:
+                self.log(f"\n{'='*50}")
+                self.log("✅ ANALYSE TERMINÉE !")
+                self.log(f"{'='*50}")
+                self.log(f"\n📂 Résultats: {BASE_DIR}")
+                self.log(f"📊 Excel: {HISTORIQUE_EXCEL}")
+                
+                # Notification
+                self.after(0, lambda: messagebox.showinfo(
+                    "Terminé",
+                    f"Analyse terminée !\n\nRésultats dans :\n{BASE_DIR}"
+                ))
+            else:
+                self.after(0, lambda: messagebox.showinfo(
+                    "Arrêté",
+                    "L'analyse a été arrêtée par l'utilisateur."
+                ))
             
         except Exception as e:
-            self.log(f"\n❌ ERREUR: {str(e)}")
-            self.after(0, lambda: messagebox.showerror("Erreur", str(e)))
+            if not self.should_stop:
+                self.log(f"\n❌ ERREUR: {str(e)}")
+                self.after(0, lambda: messagebox.showerror("Erreur", str(e)))
         
         finally:
-            # Réactiver le bouton
+            # Réafficher le bouton Lancer et cacher le bouton Arrêter
             self.is_running = False
-            self.after(0, lambda: self.start_btn.configure(
-                state="normal",
-                text="🚀 Lancer l'analyse"
-            ))
+            self.should_stop = False
+            self.after(0, lambda: self.stop_btn.pack_forget())  # Cacher le bouton Arrêter
+            self.after(0, lambda: self.start_btn.pack(side="left", expand=True, fill="x", padx=5))  # Réafficher le bouton Lancer
     
     def open_results(self):
         """Ouvre le dossier des résultats."""
