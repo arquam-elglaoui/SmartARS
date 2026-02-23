@@ -11,7 +11,6 @@ ENV/
 
 # Logs
 *.log
-smartars.log
 
 # IDE
 .idea/
@@ -35,7 +34,12 @@ config_local.py
 # Jupyter
 .ipynb_checkpoints/
 
-# Distribution
+# Distribution / Build
 dist/
 build/
 *.egg-info/
+*.spec
+SmartARS_Package/
+
+# Cursor (config locale, skills, etc.)
+.cursor/
