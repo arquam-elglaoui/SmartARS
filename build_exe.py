@@ -4,9 +4,9 @@ Script pour créer l'exécutable SmartARS.exe
 ===========================================
 """
 
+import os
 import subprocess
 import sys
-import os
 
 def build():
     """Crée l'exécutable avec PyInstaller."""
@@ -61,6 +61,12 @@ def build():
         # === MODULES PRINCIPAUX ===
         "--hidden-import=config",
         "--hidden-import=utils",
+        "--hidden-import=date_utils",
+        "--hidden-import=pdf_analyzer",
+        "--hidden-import=pdf_extractor",
+        "--hidden-import=analyzer",
+        "--hidden-import=cache",
+        "--hidden-import=excel_export",
         "--hidden-import=main",
         
         # === BIBLIOTHÈQUES EXTERNES ===

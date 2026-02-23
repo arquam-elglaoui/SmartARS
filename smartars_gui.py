@@ -5,21 +5,21 @@ SmartARS - Interface Graphique
 Application de veille réglementaire pour les autorisations EML
 """
 
-import customtkinter as ctk
+import datetime
+import os
+import queue
+import sys
+import threading
 import tkinter as tk
 from tkinter import messagebox
-import threading
-import os
-import sys
-import datetime
-import queue
 
-# Ajouter le répertoire courant au path
+import customtkinter as ctk
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from config import MOIS_FR
-from utils import normaliser_mois, MOIS_NOMS
 from regions import EXTRACTEURS
+from utils import MOIS_NOMS, normaliser_mois
 
 # === FORCER L'IMPORT DE TOUTES LES RÉGIONS (pour PyInstaller) ===
 # Cela garantit que tous les modules sont embarqués dans l'exe
