@@ -1,297 +1,185 @@
-# SmartARS 🏥
+# SmartARS
 
-**Robot de Veille Réglementaire** - Analyse automatique des RAA (Recueils des Actes Administratifs) pour extraire les autorisations d'équipements d'imagerie médicale lourde (EML) en France.
+**Robot de Veille Réglementaire** — Analyse automatique des RAA (Recueils des Actes Administratifs) pour extraire les autorisations d'équipements d'imagerie médicale lourde (EML) en France.
 
 ---
 
-## 📋 Ce que fait SmartARS
+## Ce que fait SmartARS
 
 1. **Scrape** les sites des 17 préfectures régionales françaises
 2. **Filtre** les RAA du mois/année demandé
 3. **Analyse** le contenu PDF pour trouver les autorisations d'équipements lourds
-4. **Génère** un PDF par RAA pertinent (pages 1-3 + pages d'autorisations)
+4. **Génère** un PDF par RAA pertinent (couverture + sommaire + pages d'autorisations)
 5. **Consolide** tous les résultats dans un fichier Excel unique
 
 ---
 
-## 🚀 Installation (Windows)
+## Installation (Windows)
 
-### Étape 1 : Prérequis
+### Prérequis
 
-- **Python 3.10+** installé → [Télécharger Python](https://www.python.org/downloads/)
-- Vérifier l'installation :
+- **Python 3.10+** installé — [Télécharger Python](https://www.python.org/downloads/)
+
 ```powershell
 python --version
 ```
 
-### Étape 2 : Télécharger le projet
+### Mise en place
 
 ```powershell
-# Option A : Cloner depuis GitHub
+# Cloner le projet
 git clone https://github.com/arquam-elglaoui/SmartARS.git
 cd SmartARS
 
-# Option B : Télécharger le ZIP depuis GitHub et extraire
-```
-
-### Étape 3 : Créer l'environnement virtuel
-
-```powershell
-# Créer l'environnement (une seule fois)
+# Créer l'environnement virtuel (une seule fois)
 python -m venv env
 
 # Activer l'environnement (à faire à chaque session)
 .\env\Scripts\activate
 
-# Tu verras (env) apparaître au début de la ligne
-```
-
-### Étape 4 : Installer les dépendances
-
-```powershell
+# Installer les dépendances
 pip install -r requirements.txt
 ```
 
-✅ **C'est prêt !**
-
 ---
 
-## 💻 Comment lancer SmartARS
+## Utilisation
 
-### ⚠️ IMPORTANT : Toujours activer l'environnement d'abord !
+**Toujours activer l'environnement d'abord :**
 
 ```powershell
-cd "C:\Program Files\SmartARS"    # ou ton chemin
-.\env\Scripts\activate             # Active l'environnement
+cd "C:\Program Files\SmartARS"
+.\env\Scripts\activate
 ```
 
-Tu dois voir `(env)` au début de ta ligne de commande.
-
----
-
-### Option 1 : Mode Interactif (recommandé pour débuter)
+### Mode interactif (recommandé)
 
 ```powershell
 python main.py
 ```
 
-Un menu s'affiche :
-```
-============================================================
-   SmartARS - Robot de Veille Reglementaire
-============================================================
+Un menu guidé permet de sélectionner les mois, années et régions.
 
-Mois disponibles:
-   1. Janvier
-   2. Fevrier
-   ...
-  11. Novembre
-  12. Decembre
-
-  Astuce: Plusieurs mois possibles avec virgule (ex: 10,11)
-
-Entrez le(s) mois (ex: 11 ou 10,11,12): 10,11
-
-  Astuce: Plusieurs annees possibles avec virgule (ex: 2024,2025)
-
-Entrez l'annee(s) [2025]: 2025
-
-Regions disponibles:
-   1. auvergne-rhone-alpes
-   2. bourgogne-franche-comte
-   ...
-   0. TOUTES les regions
-
-Entrez les numeros des regions (ex: 1,3,5) ou 0 pour toutes: 1,3,10
-
-----------------------------------------
-  Mois:    octobre, novembre
-  Annees:  2025
-  Regions: auvergne-rhone-alpes, bretagne, ile-de-france
-----------------------------------------
-
-Lancer l'analyse ? (O/n): o
-```
-
----
-
-### Option 2 : Ligne de commande directe
+### Ligne de commande
 
 ```powershell
-# UN mois, UNE année, TOUTES les régions
-python main.py 11 2025
-
-# PLUSIEURS mois (séparés par virgule)
-python main.py 10,11,12 2025
-
-# PLUSIEURS années (séparés par virgule)
-python main.py 11 2024,2025
-
-# PLUSIEURS mois ET années (toutes les combinaisons)
-python main.py 10,11 2024,2025
-
-# Certaines régions seulement
-python main.py 11 2025 bretagne ile-de-france paca
-
-# Forcer la ré-analyse (ignorer le cache)
-python main.py 11 2025 --force
+python main.py 11 2025                   # Un mois, toutes régions
+python main.py 10,11,12 2025             # Plusieurs mois
+python main.py 11 2024,2025              # Plusieurs années
+python main.py 11 2025 bretagne paca     # Régions spécifiques
+python main.py 11 2025 --force           # Ignorer le cache
 ```
 
----
-
-### Option 3 : Tester une seule région
+### Interface graphique
 
 ```powershell
-python main.py 11 2025 bretagne
+python smartars_gui.py
 ```
 
-Utile pour vérifier que tout fonctionne avant de lancer toutes les régions.
+Fonctionnalités : sélection multiple mois/régions, progression en temps réel, accès direct aux résultats et à l'Excel.
 
 ---
 
-### Syntaxe des paramètres
+## Paramètres
 
-| Paramètre | Format | Exemples |
-|-----------|--------|----------|
-| **Mois** | Numéro ou nom, virgule pour multiples | `11` ou `novembre` ou `10,11,12` |
-| **Année** | AAAA, virgule pour multiples | `2025` ou `2024,2025` |
-| **Régions** | Noms séparés par espaces | `bretagne paca normandie` |
+| Paramètre    | Format                          | Exemples                          |
+|--------------|---------------------------------|-----------------------------------|
+| **Mois**     | Numéro ou nom, virgule pour multiples | `11`, `novembre`, `10,11,12` |
+| **Année**    | AAAA, virgule pour multiples    | `2025`, `2024,2025`               |
+| **Régions**  | Noms séparés par espaces        | `bretagne paca normandie`         |
+| **--force**  | Ignorer le cache anti-doublons  |                                   |
 
 ---
 
-## 📂 Où trouver les résultats
+## Résultats
 
-Tous les résultats sont dans :
-```
-C:\Users\TON_NOM\Documents\SmartARS\
-```
-
-### Structure des dossiers
+Tous les résultats sont dans `~/Documents/SmartARS/`.
 
 ```
 Documents/SmartARS/
-├── SmartARS_Historique.xlsx          # ← FICHIER PRINCIPAL (toutes les données)
-├── SmartARS.log                       # Log global
+├── SmartARS_Historique.xlsx            # Fichier principal (toutes les données)
 └── results/
-    └── 2025_decembre/                 # Un dossier par mois analysé
-        ├── smartars.log               # Log de l'exécution
-        ├── auvergne-rhone-alpes/
-        │   └── log_aura_decembre_2025.txt   # Log détaillé de la région
+    └── 2025_decembre/                  # Un dossier par mois analysé
+        ├── smartars.log                # Log de l'exécution
         ├── bretagne/
-        │   ├── log_bzh_decembre_2025.txt    # Log détaillé
-        │   ├── RAA_029_2025_0042_EXTRACT.pdf
-        │   └── RAA_029_2025_0045_EXTRACT.pdf
-        ├── ile-de-france/
-        │   ├── log_idf_decembre_2025.txt    # Log détaillé
-        │   └── RAA_075_2025_0123_EXTRACT.pdf
-        └── ...
+        │   ├── log_bzh_decembre_2025.txt
+        │   └── RAA_029_2025_0042_EXTRACT.pdf
+        └── ile-de-france/
+            ├── log_idf_decembre_2025.txt
+            └── RAA_075_2025_0123_EXTRACT.pdf
 ```
 
-### Le fichier Excel `SmartARS_Historique.xlsx`
+### Fichier Excel
 
-- **Une feuille par mois** (ex: "2025_novembre", "2025_octobre")
-- **Colonnes** : Region, Source (URL), Page, Equipements, Etablissement, Code_Postal
-- **Pas de doublons** : les entrées existantes ne sont pas recréées
+- **Une feuille par mois** (ex: `2025_novembre`)
+- **Colonnes** : Region, Source, Page, Equipements, Etablissement, Code_Postal, URL
+- **Anti-doublons** : les entrées existantes ne sont pas recréées
 
-### Les PDFs extraits
+### PDFs extraits
 
-Chaque PDF contient :
-- **Pages 1-3** : Page de garde et sommaire du RAA original
-- **Pages pertinentes** : Les pages contenant des autorisations d'équipements
-
-Nom du fichier = nom du RAA original + `_EXTRACT.pdf`
+Chaque PDF contient la couverture + le sommaire du RAA original + les pages d'autorisations.
 
 ---
 
-## 🔍 Équipements recherchés
+## Équipements recherchés
 
-| Mot-clé | Description |
-|---------|-------------|
-| **IRM** | Imagerie par Résonance Magnétique |
-| **Scanner / Scanographe** | Tomodensitométrie |
-| **TEP** | Tomographie par Émission de Positons |
-| **Gamma** | Caméra à scintillation |
-| **Tomographe** | Appareil de tomographie |
-| **Radiologie** | Équipements radiologiques |
-| **Imagerie en coupes** | Modalités d'imagerie en coupes |
-| **Bilan Quantitatif/Quantifié** | Documents de bilan EML |
-
----
-
-## 🗺️ Régions couvertes (17)
-
-| Région | Nom pour la commande |
-|--------|---------------------|
-| Auvergne-Rhône-Alpes | `auvergne-rhone-alpes` |
-| Bourgogne-Franche-Comté | `bourgogne-franche-comte` |
-| Bretagne | `bretagne` |
-| Centre-Val de Loire | `centre-val-de-loire` |
-| Corse | `corse` |
-| Grand Est | `grand-est` |
-| Guadeloupe | `guadeloupe` |
-| Guyane | `guyane` |
-| Hauts-de-France | `hauts-de-france` |
-| Île-de-France | `ile-de-france` |
-| Martinique | `martinique` |
-| Normandie | `normandie` |
-| Nouvelle-Aquitaine | `nouvelle-aquitaine` |
-| Occitanie | `occitanie` |
-| Pays de la Loire | `pays-de-la-loire` |
-| Provence-Alpes-Côte d'Azur | `paca` ou `provence-alpes-cote-azur` |
-| La Réunion | `reunion` ⚠️ |
-
-> **⚠️ Note La Réunion** : Cette région publie les RAA du mois le 1er ou 2 du mois **suivant**. 
-> Exemple : les RAA de décembre 2025 ne seront disponibles qu'à partir du 1er janvier 2026.
+| Mot-clé                     | Description                              |
+|-----------------------------|------------------------------------------|
+| IRM                         | Imagerie par Résonance Magnétique        |
+| Scanner / Scanographe       | Tomodensitométrie                        |
+| TEP                         | Tomographie par Émission de Positons     |
+| Gamma                       | Caméra à scintillation                   |
+| Tomographe                  | Appareil de tomographie                  |
+| Radiologie                  | Équipements radiologiques                |
+| Imagerie en coupes           | Modalités d'imagerie en coupes           |
+| Bilan Quantitatif/Quantifié | Documents de bilan EML                   |
 
 ---
 
-## 🛠️ Dépannage
+## Régions couvertes (17)
 
-### "python n'est pas reconnu"
-→ Python n'est pas installé ou pas dans le PATH. Réinstalle Python en cochant "Add to PATH".
+| Région                        | Identifiant commande       |
+|-------------------------------|----------------------------|
+| Auvergne-Rhône-Alpes          | `auvergne-rhone-alpes`     |
+| Bourgogne-Franche-Comté       | `bourgogne-franche-comte`  |
+| Bretagne                      | `bretagne`                 |
+| Centre-Val de Loire           | `centre-val-de-loire`      |
+| Corse                         | `corse`                    |
+| Grand Est                     | `grand-est`                |
+| Guadeloupe                    | `guadeloupe`               |
+| Guyane                        | `guyane`                   |
+| Hauts-de-France               | `hauts-de-france`          |
+| Île-de-France                 | `ile-de-france`            |
+| Martinique                    | `martinique`               |
+| Normandie                     | `normandie`                |
+| Nouvelle-Aquitaine            | `nouvelle-aquitaine`       |
+| Occitanie                     | `occitanie`                |
+| Pays de la Loire              | `pays-de-la-loire`         |
+| Provence-Alpes-Côte d'Azur    | `paca`                     |
+| La Réunion                    | `reunion`                  |
 
-### "No module named 'requests'"
-→ L'environnement n'est pas activé ou les dépendances pas installées :
-```powershell
-.\env\Scripts\activate
-pip install -r requirements.txt
-```
-
-### "0 PDF trouvé" pour une région
-→ Soit il n'y a pas de RAA pour ce mois, soit le site de la préfecture a changé. Vérifier manuellement sur le site.
-
-### Erreur de téléchargement / Timeout
-→ Le script fait 3 tentatives automatiques. Si ça échoue toujours, le site est peut-être indisponible.
-
-### Je veux relancer l'analyse d'un mois déjà fait
-→ Utilise `--force` pour ignorer le cache :
-```powershell
-python main.py novembre 2025 --force
-```
-
----
-
-## ⚙️ Configuration avancée
-
-Éditer `config.py` pour modifier :
-
-- `KEYWORDS_REGEX` : Patterns de détection des équipements
-- `KEYWORDS_AUTORISATION` : Mots confirmant une autorisation
-- `TIMEOUT_PAGE` / `TIMEOUT_PDF` : Délais de téléchargement (défaut: 30s / 60s)
-- `MAX_RETRIES` : Nombre de tentatives en cas d'échec (défaut: 3)
+> **Note La Réunion** : publie les RAA du mois le 1er ou 2 du mois suivant.
 
 ---
 
-## 📁 Structure du code
+## Structure du code
 
 ```
 SmartARS/
-├── main.py              # Point d'entrée, orchestration
-├── config.py            # Configuration globale
-├── utils.py             # Fonctions : scraping, analyse PDF, téléchargement
+├── main.py              # Point d'entrée CLI (menu interactif + orchestration)
+├── smartars_gui.py      # Interface graphique (CustomTkinter)
+├── config.py            # Configuration : mots-clés, timeouts, mois
+├── utils.py             # Façade utilitaires (HTTP, ré-exports)
+├── date_utils.py        # Normalisation mois, accents, validation dates
+├── pdf_analyzer.py      # Analyse du contenu PDF (détection équipements)
+├── pdf_extractor.py     # Création des PDFs extraits (sommaire + pages)
+├── analyzer.py          # Orchestration analyse par région + logs
+├── cache.py             # Cache anti-doublons (JSON)
+├── excel_export.py      # Export Excel historique unique
+├── build_exe.py         # Script de build PyInstaller
 ├── requirements.txt     # Dépendances Python
 ├── README.md            # Ce fichier
-└── regions/             # Un fichier par région
+└── regions/             # Un extracteur par région (17 fichiers)
     ├── __init__.py
     ├── bretagne.py
     ├── ile_de_france.py
@@ -300,127 +188,40 @@ SmartARS/
 
 ---
 
-## 📝 Logs
+## Configuration avancée
 
-### Log global
-- `C:\Users\TON_NOM\Documents\SmartARS\results\{annee}_{mois}\smartars.log`
+Éditer `config.py` pour modifier :
 
-### Logs détaillés par région
-Chaque région a son propre fichier log avec un nom parlant :
-
-| Région | Fichier log |
-|--------|-------------|
-| Auvergne-Rhône-Alpes | `log_aura_decembre_2025.txt` |
-| Bourgogne-Franche-Comté | `log_bfc_decembre_2025.txt` |
-| Bretagne | `log_bzh_decembre_2025.txt` |
-| Centre-Val de Loire | `log_cvl_decembre_2025.txt` |
-| Île-de-France | `log_idf_decembre_2025.txt` |
-| Hauts-de-France | `log_hdf_decembre_2025.txt` |
-| ... | ... |
-
-**Contenu du log région** :
-- Liste des PDFs trouvés avec leurs URLs
-- PDFs analysés vs ignorés (cache)
-- Autorisations trouvées (page + équipements)
-- **Se cumule** : chaque exécution ajoute une entrée datée
-
-Exemple :
-```
-============================================================
-=== BRETAGNE - 12/2025 ===
-Date analyse: 2025-12-05 15:03:34
-
-PDFs TROUVES (12):
-  1. recueil-r53-2025-160-recueil-des-actes-administratifs.pdf
-  2. recueil-r53-2025-159-recueil-des-actes-administratifs.pdf
-  ...
-
-PDFs ANALYSES: 12
-PDFs IGNORES (cache): 0
-PAGES PERTINENTES: 3
-PDFs EXTRAITS CREES: 2
-
-AUTORISATIONS TROUVEES:
-  - Page 45: IRM, Scanner (recueil-r53-2025-160...)
-  - Page 78: TEP (recueil-r53-2025-159...)
-```
+- `KEYWORDS_REGEX` : Patterns de détection des équipements
+- `KEYWORDS_AUTORISATION` : Mots confirmant une autorisation
+- `TIMEOUT_PAGE` / `TIMEOUT_PDF` : Délais de téléchargement (30s / 120s)
+- `MAX_RETRIES` : Nombre de tentatives en cas d'échec (3)
 
 ---
 
-## 🔧 Commandes utiles
+## Créer un exécutable (.exe)
 
 ```powershell
-# Activer l'environnement
 .\env\Scripts\activate
-
-# Lancer le programme
-python main.py
-
-# Voir l'aide
-python main.py --help
-
-# Mettre à jour les dépendances
-pip install -r requirements.txt --upgrade
-
-# Désactiver l'environnement
-deactivate
-```
-
----
-
-## 🖥️ Interface Graphique (GUI)
-
-SmartARS dispose d'une interface graphique moderne et intuitive.
-
-### Lancer l'interface
-
-```powershell
-python smartars_gui.py
-```
-
-### Fonctionnalités de l'interface
-
-- ✅ Sélection multiple des mois (cases à cocher)
-- ✅ Sélection de l'année (liste déroulante)
-- ✅ Sélection des régions (cases à cocher)
-- ✅ Boutons "Toutes" / "Aucune" pour sélection rapide
-- ✅ Zone de progression avec logs en temps réel
-- ✅ Barre de progression
-- ✅ Bouton "Ouvrir les résultats"
-- ✅ Bouton "Ouvrir Excel"
-
----
-
-## 📦 Créer un exécutable (.exe)
-
-Pour distribuer SmartARS sans nécessiter Python :
-
-```powershell
-# 1. Activer l'environnement
-.\env\Scripts\activate
-
-# 2. Lancer le build
 python build_exe.py
 ```
 
-L'exécutable sera créé dans `dist/SmartARS.exe` (~50-100 Mo).
-
-### Distribuer l'application
-
-1. Copier `SmartARS.exe` sur un **partage réseau**
-2. Ou l'envoyer par **email**
-3. Les utilisateurs double-cliquent → l'app se lance !
-
-**Aucune installation requise** sur les postes des utilisateurs.
+L'exécutable est créé dans `dist/SmartARS.exe`. Aucune installation requise sur les postes utilisateurs.
 
 ---
 
-## 📄 Licence
+## Dépannage
 
-Projet interne - Usage privé.
+| Problème                            | Solution                                              |
+|-------------------------------------|-------------------------------------------------------|
+| `python n'est pas reconnu`          | Réinstaller Python en cochant "Add to PATH"           |
+| `No module named 'requests'`        | `.\env\Scripts\activate` puis `pip install -r requirements.txt` |
+| 0 PDF trouvé pour une région        | Pas de RAA ce mois, ou site de la préfecture modifié  |
+| Erreur de téléchargement / Timeout  | 3 tentatives automatiques. Site peut-être indisponible |
+| Relancer un mois déjà analysé       | Ajouter `--force` à la commande                       |
 
 ---
 
-## 👤 Auteur
+## Licence
 
-Développé pour la veille réglementaire en imagerie médicale.
+Projet interne — Usage privé.
