@@ -27,7 +27,7 @@ def extraire_corse(mois_num, annee):
         MOIS_NOMS.get(mois_num, ""),       # Sans accents (decembre)
     ]
     
-    # 1. Région Corse
+    # 1. Région Corse (page annuelle — le nom du fichier n'a pas toujours l'année)
     url1 = f"{BASE_CORSE_SUD}/Publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-la-Region-Corse/Recueil-des-actes-administratifs-de-la-Region-Corse-pour-l-annee-{annee}"
     soup = get_soup(url1)
     if soup:
@@ -35,13 +35,13 @@ def extraire_corse(mois_num, annee):
             href = a['href']
             if '.pdf' in href.lower():
                 text = a.get_text(strip=True)
-                if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+                if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
                     if href.startswith('/'):
                         href = BASE_CORSE_SUD + href
                     if href not in pdf_links:
                         pdf_links.append(href)
     
-    # 2. Corse du Sud
+    # 2. Corse du Sud (page annuelle — même logique)
     url2 = f"{BASE_CORSE_SUD}/Publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-la-prefecture-de-la-Corse-du-Sud/Recueils-des-actes-administratifs-de-l-annee-{annee}"
     soup = get_soup(url2)
     if soup:
@@ -49,7 +49,7 @@ def extraire_corse(mois_num, annee):
             href = a['href']
             if '.pdf' in href.lower():
                 text = a.get_text(strip=True)
-                if contient_date_stricte(text, mois_num, annee) or contient_date_stricte(href, mois_num, annee):
+                if contient_date_stricte(text, mois_num, annee, page_annuelle=True) or contient_date_stricte(href, mois_num, annee):
                     if href.startswith('/'):
                         href = BASE_CORSE_SUD + href
                     if href not in pdf_links:
