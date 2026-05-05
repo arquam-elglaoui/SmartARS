@@ -1,13 +1,13 @@
-1) auvergne Rhône alpes
+1) auvergne Rhï¿½ne alpes
 https://www.prefectures-regions.gouv.fr/auvergne-rhone-alpes/Documents-publications/Recueil-regional-des-actes-administratifs-RAA
-Ici rien de magique il y a tous les RAA sur une seule même page depuis 2016 il suffit de détecter le mois et l'année recherchés pour ne pas se taper tous les fichiers sur la page. Les PDF sont souvent nommés comme ça "RAA régional n° 1 du 14 novembre 2025 télécharger PDF - 22 539,86 ko" ou comme ça "RAA régional spécial du 13 novembre 2025 télécharger PDF - 17 903,92 ko"
-Je propose de regarder d'abord le titre qui précède chaque liste de fichier (ex : 2025 --> novembre 2025 --> liste de fichier PDF) et de vérifier s’il y a le mois (ou le chiffre correspondant au mois ex : 11) et l'année dans le nom de fichier
+Ici rien de magique il y a tous les RAA sur une seule mï¿½me page depuis 2016 il suffit de dï¿½tecter le mois et l'annï¿½e recherchï¿½s pour ne pas se taper tous les fichiers sur la page. Les PDF sont souvent nommï¿½s comme ï¿½a "RAA rï¿½gional nï¿½ 1 du 14 novembre 2025 tï¿½lï¿½charger PDF - 22 539,86 ko" ou comme ï¿½a "RAA rï¿½gional spï¿½cial du 13 novembre 2025 tï¿½lï¿½charger PDF - 17 903,92 ko"
+Je propose de regarder d'abord le titre qui prï¿½cï¿½de chaque liste de fichier (ex : 2025 --> novembre 2025 --> liste de fichier PDF) et de vï¿½rifier sï¿½il y a le mois (ou le chiffre correspondant au mois ex : 11) et l'annï¿½e dans le nom de fichier
 
-2) Bourgogne franche comté
+2) Bourgogne franche comtï¿½
 
 https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/Documents-publications/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-Bourgogne-Franche-Comte-2025
 https://www.prefectures-regions.gouv.fr/bourgogne-franche-comte/Documents-publications/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-Bourgogne-Franche-Comte-2024
-Ici rien de plus simple tout est dans les noms des fichiers (ex : RAA 156 Bourgogne-Franche-Comté du 08 octobre 2024 télécharger PDF - 3 721,87 ko) pour 2025 il y a une partie "documents liés" qui ne fait que tout dédoubler donc faire gaffe aux doublons
+Ici rien de plus simple tout est dans les noms des fichiers (ex : RAA 156 Bourgogne-Franche-Comtï¿½ du 08 octobre 2024 tï¿½lï¿½charger PDF - 3 721,87 ko) pour 2025 il y a une partie "documents liï¿½s" qui ne fait que tout dï¿½doubler donc faire gaffe aux doublons
 
 3) Bretagne
 
@@ -18,13 +18,13 @@ Ici aussi tout est dans les noms des fichiers avec un titre juste avant type "Li
 
 https://www.prefectures-regions.gouv.fr/centre-val-de-loire/Documents-publications/Recueil-des-Actes-Administratifs-2025
 
-Ici aussi tout est dans les noms des fichiers "recueil-r24-2025-002 du 06 janvier 2025 télécharger (PDF - 1 751,90 ko)" tu feras juste gaffe aux doublons
+Ici aussi tout est dans les noms des fichiers "recueil-r24-2025-002 du 06 janvier 2025 tï¿½lï¿½charger (PDF - 1 751,90 ko)" tu feras juste gaffe aux doublons
 
 5) corse
 
 Il faut checker 3 parties :
 
-A- Région corse : les url sont dans ce format et contiennent tous les mois ; la date du RAA est dans la Meta data du fichier pas dans le nom je pense que tu peux te démerder pour la trouver en python
+A- Rï¿½gion corse : les url sont dans ce format et contiennent tous les mois ; la date du RAA est dans la Meta data du fichier pas dans le nom je pense que tu peux te dï¿½merder pour la trouver en python
 
 https://www.corse-du-sud.gouv.fr/Publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-la-Region-Corse/Recueil-des-actes-administratifs-de-la-Region-Corse-pour-l-annee-{AAAA}
 
@@ -34,7 +34,7 @@ https://www.corse-du-sud.gouv.fr/Publications/Recueil-des-actes-administratifs/R
 
 B- Corse du sud :
 
-Même logique que pour la région corse :
+Mï¿½me logique que pour la rï¿½gion corse :
 
 https://www.corse-du-sud.gouv.fr/Publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-la-prefecture-de-la-Corse-du-Sud/Recueils-des-actes-administratifs-de-l-annee-{AAAA}
 
@@ -43,90 +43,106 @@ Ex : pour 2025 :
 https://www.corse-du-sud.gouv.fr/Publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-la-prefecture-de-la-Corse-du-Sud/Recueils-des-actes-administratifs-de-l-annee-2025
 
 C- haute corse :
-À noter qu’il peut y avoir 2 pages pour avoir tous les mois (ex : 1 page de décembre à mars et la 2eme pour janvier et février) :
-Page 1 :
+ï¿½ noter quï¿½il peut y avoir 2 pages pour avoir tous les moisï¿½(exï¿½: 1 page de dï¿½cembre ï¿½ mars et la 2eme pour janvier et fï¿½vrier) :
+Page 1ï¿½:
 https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-2025
-Page 2 :
+Page 2ï¿½:
 https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-2025/(offset)/10
-Ici la page où se trouvent les liens des RAA par mois pour 2025 :
-tu peux inspecter le code et trouver toutes les url par mois en cherchant le mois dans l’url ou construire l’url à partir du titre de la card (cf. capture d’écran)
+Ici la page oï¿½ se trouvent les liens des RAA par mois pour 2025ï¿½:
+tu peux inspecter le code et trouver toutes les url par mois en cherchant le mois dans lï¿½url ou construire lï¿½url ï¿½ partir du titre de la card (cf. capture dï¿½ï¿½cran)
 
-Ex : pour janvier 2025
-Titre : « RAA du mois de janvier 2025 »
-Url : https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-2025/RAA-du-mois-de-janvier-2025
-Ex : pour février 2025
-Titre : « RAA du mois février 2025 »
+Exï¿½: pour janvier 2025
+Titreï¿½: ï¿½ï¿½RAA du mois de janvier 2025ï¿½ï¿½
+Urlï¿½: https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-2025/RAA-du-mois-de-janvier-2025
+Ex : pour fï¿½vrier 2025
+Titre : ï¿½ï¿½RAA du mois fï¿½vrier 2025ï¿½ï¿½
 Url : https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-2025/RAA-du-mois-fevrier-2025
 Ex : pour avril 2025
-Titre : « RAA du mois d'avril 2025 »
+Titre : ï¿½ï¿½RAA du mois d'avril 2025ï¿½ï¿½
 Url : https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-2025/RAA-du-mois-d-avril-2025 
-en gros pour la haute corse il n’y a pas vraiment de règle fixe il vaut mieux parcourir le code de la page mère à travers l’url construite au format : « https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-{AAAA} » pour la page 1 et « https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-{AAAA}/(offset)/10 » pour la page 2 et trouver l’url correspondante au mois qu’on recherche en inspectant le code en checkant toujours les 2 pages
+en gros pour la haute corse il nï¿½y a pas vraiment de rï¿½gle fixe il vaut mieux parcourir le code de la page mï¿½re ï¿½ travers lï¿½url construite au formatï¿½: ï¿½ï¿½https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-{AAAA}ï¿½ï¿½ pour la page 1 et ï¿½ï¿½https://www.haute-corse.gouv.fr/Publications/Publications-administratives-et-legales/Recueils-des-actes-administratifs/Recueils-des-actes-administratifs-{AAAA}/(offset)/10ï¿½ï¿½ pour la page 2 et trouver lï¿½url correspondante au mois quï¿½on recherche en inspectant le code en checkant toujours les 2 pages
 
 6) Grand EST
-URL : https://www.prefectures-regions.gouv.fr/grand-est/Documents-publications/Recueil-des-actes-administratifs-regional/Recueil-des-actes-administratifs/RAA-Annee-2025/#titre
-Pour l’année, il faut utiliser ce format pour construire l’url :
+URLï¿½: https://www.prefectures-regions.gouv.fr/grand-est/Documents-publications/Recueil-des-actes-administratifs-regional/Recueil-des-actes-administratifs/RAA-Annee-2025/#titre
+Pour lï¿½annï¿½e, il faut utiliser ce format pour construire lï¿½urlï¿½:
 https://www.prefectures-regions.gouv.fr/grand-est/Documents-publications/Recueil-des-actes-administratifs-regional/Recueil-des-actes-administratifs/RAA-Annee-{AAAA}/#titre
-Tu trouveras le mois dans les noms des fichiers et dans le titre de l’accordéon (collapse) rien de magique mais toujours double check
+Tu trouveras le mois dans les noms des fichiers et dans le titre de lï¿½accordï¿½on (collapse) rien de magique mais toujours double check
 
-7) Guadeloupe :
-Tricky parce que l’url change complètement des autres car l’url devient :
+7) Guadeloupeï¿½:
+Tricky parce que lï¿½url change complï¿½tement des autres car lï¿½url devientï¿½:
 https://www.guadeloupe.gouv.fr/Publications/Le-Recueil-des-actes-administratifs/2025/Fevrier-2025
-Donc :
+Doncï¿½:
 https://www.guadeloupe.gouv.fr/Publications/Le-Recueil-des-actes-administratifs/{AAAA}/{Mois}-{AAAA}
 
-8) Guyane :
-Même idée que Guadeloupe :
+8) Guyaneï¿½:
+Mï¿½me idï¿½e que Guadeloupeï¿½:
 https://www.guyane.gouv.fr/Publications/Recueil-des-actes-administratifs/Annee-2025/Mars-2025
-Donc format :
+Donc formatï¿½:
 https://www.guyane.gouv.fr/Publications/Recueil-des-actes-administratifs/Annee-{AAAA}/{Mois}-{AAAA}
 
-9) hauts de France :
-Pour l’année :
+9) hauts de Franceï¿½:
+Pour lï¿½annï¿½eï¿½:
 https://www.prefectures-regions.gouv.fr/hauts-de-france/Documents-publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-l-Etat-en-Hauts-de-France-2025
 Ici aussi rien de magique
-Format : https://www.prefectures-regions.gouv.fr/hauts-de-france/Documents-publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-l-Etat-en-Hauts-de-France-{AAAA}
-Le mois est dans le nom du fichier, l’année aussi d’ailleurs pour double checker.
+Formatï¿½: https://www.prefectures-regions.gouv.fr/hauts-de-france/Documents-publications/Recueil-des-actes-administratifs/Recueil-des-actes-administratifs-de-l-Etat-en-Hauts-de-France-{AAAA}
+Le mois est dans le nom du fichier, lï¿½annï¿½e aussi dï¿½ailleurs pour double checker.
 
-10) Ile de France :
-URL : https://www.prefectures-regions.gouv.fr/ile-de-france/Documents-publications/Recueil-des-actes-administratifs/RAA-de-la-region-Ile-de-France-2025/Novembre/#titre
+10) Ile de Franceï¿½:
+URLï¿½: https://www.prefectures-regions.gouv.fr/ile-de-france/Documents-publications/Recueil-des-actes-administratifs/RAA-de-la-region-Ile-de-France-2025/Novembre/#titre
 Donc format : https://www.prefectures-regions.gouv.fr/ile-de-france/Documents-publications/Recueil-des-actes-administratifs/RAA-de-la-region-Ile-de-France-{AAAA}/{Mois}/#titre
-L’année et le mois sont aussi dans les noms des fichiers en chiffres s’il faut vérifier
-11) Martinique :
-Ici deux URL à regarder :
+Lï¿½annï¿½e et le mois sont aussi dans les noms des fichiers en chiffres sï¿½il faut vï¿½rifier
+
+11) Martiniqueï¿½:
+Ici deux URL ï¿½ regarderï¿½:
 RAA: https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-2025/Recueil-des-Actes-Administratifs/Novembre
-Donc format : https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-{AAAA}/Recueil-des-Actes-Administratifs/{Mois}
-RAA spécial : https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-2025/Recueil-des-Actes-Administratifs-Special/Novembre
-Donc format : https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-{AAAA}/Recueil-des-Actes-Administratifs-Special/{Mois}
+Donc formatï¿½: https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-{AAAA}/Recueil-des-Actes-Administratifs/{Mois}
+RAA spï¿½cial : https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-2025/Recueil-des-Actes-Administratifs-Special/Novembre
+Donc formatï¿½: https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-{AAAA}/Recueil-des-Actes-Administratifs-Special/{Mois}
 
+pour 2026 ou Ã  partir de 2026 qui sait? : plus de mois nÃ©cessaire, tout est regroupÃ© dans la mÃªme annÃ©e
 
-12) Normandie :
+RAA: https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-2026/Recueil-des-Actes-Administratifs
+Donc: https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-{AAAA}/Recueil-des-Actes-Administratifs
+RAA spï¿½cial : https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-2026/Recueil-des-Actes-Administratifs-Special
+Donc: https://www.martinique.gouv.fr/Publications/Recueils-des-actes-administratifs-publies/RAA-{AAAA}/Recueil-des-Actes-Administratifs-Special
+
+je propose qu'on laisse les deux rÃ¨gles et tenter les deux Ã  chaque fois au cas oÃ¹ l'un ne marche pas l'autre marchera peut Ãªtre
+
+12) Normandieï¿½:
 https://www.prefectures-regions.gouv.fr/normandie/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-Actes-Administratifs-2025/Recueils-des-actes-administratifs-regionaux-Aout-2025
-Donc format : https://www.prefectures-regions.gouv.fr/normandie/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-Actes-Administratifs-{AAAA}/Recueils-des-actes-administratifs-regionaux-{Mois}-{AAAA}
+Donc formatï¿½: https://www.prefectures-regions.gouv.fr/normandie/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-Actes-Administratifs-{AAAA}/Recueils-des-actes-administratifs-regionaux-{Mois}-{AAAA}
 
-13) Nouvelle Aquitaine :
+pour 2026 ou Ã  partir de 2026 qui sait? : plus de S dans le mot recueil(s) dans la derniÃ¨re partie du lien ("Recueil-des-actes-administratifs-regionaux-{Mois}-{AAAA}" au lieu de "Recueils-des-actes-administratifs-regionaux-{Mois}-{AAAA}" )
+
+https://www.prefectures-regions.gouv.fr/normandie/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-actes-administratifs-2026/Recueil-des-actes-administratifs-regionaux-Fevrier-2026
+https://www.prefectures-regions.gouv.fr/normandie/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-actes-administratifs-{AAAA}/Recueil-des-actes-administratifs-regionaux-{Mois}-{AAAA}
+
+je propose qu'on laisse les deux rÃ¨gles et tenter les deux Ã  chaque fois au cas oÃ¹ l'un ne marche pas l'autre marchera peut Ãªtre
+
+13) Nouvelle Aquitaineï¿½:
 https://www.prefectures-regions.gouv.fr/nouvelle-aquitaine/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-Actes-Administratifs-pour-l-annee-2025/Novembre-2025/#titre
-Donc format : https://www.prefectures-regions.gouv.fr/nouvelle-aquitaine/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-Actes-Administratifs-pour-l-annee-{AAAA}/{Mois}-{AAAA}/#titre
+Donc formatï¿½: https://www.prefectures-regions.gouv.fr/nouvelle-aquitaine/Documents-publications/Recueil-des-Actes-Administratifs/Recueil-des-Actes-Administratifs-pour-l-annee-{AAAA}/{Mois}-{AAAA}/#titre
 
-14) Occitanie :
-C’est le bazar complet il n’y a aucune règle dans la formation des url :
-Donc vérifie cette url : https://www.prefectures-regions.gouv.fr/occitanie/tags/view/Occitanie/Documents+et+publications/Recueil+des+actes+administratifs/
-Ensuite : https://www.prefectures-regions.gouv.fr/occitanie/tags/view/Occitanie/Documents+et+publications/Recueil+des+actes+administratifs/(offset)/10
-Ensuite : https://www.prefectures-regions.gouv.fr/occitanie/tags/view/Occitanie/Documents+et+publications/Recueil+des+actes+administratifs/(offset)/20
-Et ainsi de suite en inspectant le code de chaque page jusqu’à trouver l’url qui contient le mois ET l’année qu’on recherche tu me trouveras un moyen de faire ça en python
+14) Occitanieï¿½:
+Cï¿½est le bazar complet il nï¿½y a aucune rï¿½gle dans la formation des urlï¿½:
+Donc vï¿½rifie cette urlï¿½: https://www.prefectures-regions.gouv.fr/occitanie/tags/view/Occitanie/Documents+et+publications/Recueil+des+actes+administratifs/
+Ensuiteï¿½: https://www.prefectures-regions.gouv.fr/occitanie/tags/view/Occitanie/Documents+et+publications/Recueil+des+actes+administratifs/(offset)/10
+Ensuiteï¿½: https://www.prefectures-regions.gouv.fr/occitanie/tags/view/Occitanie/Documents+et+publications/Recueil+des+actes+administratifs/(offset)/20
+Et ainsi de suite en inspectant le code de chaque page jusquï¿½ï¿½ trouver lï¿½url qui contient le mois ET lï¿½annï¿½e quï¿½on recherche tu me trouveras un moyen de faire ï¿½a en python
 
-15) pays de la Loire :
+15) pays de la Loireï¿½:
 https://www.prefectures-regions.gouv.fr/pays-de-la-loire/DOCUMENTS-PUBLICATIONS/Publications-legales/Recueil-des-actes-administratifs-RAA/RAA-prefecture-de-region-des-Pays-de-la-Loire/RAA-de-la-prefecture-de-region-des-Pays-de-la-Loire-2025/Mars-2025/#titre
-donc format : https://www.prefectures-regions.gouv.fr/pays-de-la-loire/DOCUMENTS-PUBLICATIONS/Publications-legales/Recueil-des-actes-administratifs-RAA/RAA-prefecture-de-region-des-Pays-de-la-Loire/RAA-de-la-prefecture-de-region-des-Pays-de-la-Loire-{AAAA}/{Mois}-{AAAA}/#titre
+donc formatï¿½: https://www.prefectures-regions.gouv.fr/pays-de-la-loire/DOCUMENTS-PUBLICATIONS/Publications-legales/Recueil-des-actes-administratifs-RAA/RAA-prefecture-de-region-des-Pays-de-la-Loire/RAA-de-la-prefecture-de-region-des-Pays-de-la-Loire-{AAAA}/{Mois}-{AAAA}/#titre
 
-16) Provence Alpes Côte d’Azur :
-Ici exactement même logique qu’auvergne Rhône alpes
-URL : https://www.prefectures-regions.gouv.fr/provence-alpes-cote-dazur/Documents-publications/RAA-2024-le-Recueil-des-Actes-Administratifs-2024
+16) Provence Alpes Cï¿½te dï¿½Azurï¿½:
+Ici exactement mï¿½me logique quï¿½auvergne Rhï¿½ne alpes
+URLï¿½: https://www.prefectures-regions.gouv.fr/provence-alpes-cote-dazur/Documents-publications/RAA-2024-le-Recueil-des-Actes-Administratifs-2024
 Donc format : https://www.prefectures-regions.gouv.fr/provence-alpes-cote-dazur/Documents-publications/RAA-{AAAA}-le-Recueil-des-Actes-Administratifs-{AAAA}
-Sauf pour 2022 il y a une erreur car c’est 20222 au lieu de 2022 donc format pour 2022 seul : https://www.prefectures-regions.gouv.fr/provence-alpes-cote-dazur/Documents-publications/RAA-{AAAA}-le-Recueil-des-Actes-Administratifs-{AAAA}2
+Sauf pour 2022 il y a une erreur car cï¿½est 20222 au lieu de 2022 donc format pour 2022 seulï¿½: https://www.prefectures-regions.gouv.fr/provence-alpes-cote-dazur/Documents-publications/RAA-{AAAA}-le-Recueil-des-Actes-Administratifs-{AAAA}2
 
-17) réunion :
+17) rï¿½unionï¿½:
 https://www.reunion.gouv.fr/Publications/Publications-administratives-et-legales/Recueil-des-actes-administratifs-RAA/Recueil-des-actes-administratifs-2025/JANVIER
-Donc format : https://www.reunion.gouv.fr/Publications/Publications-administratives-et-legales/Recueil-des-actes-administratifs-RAA/Recueil-des-actes-administratifs-{AAAA}/{MOIS}
+Donc formatï¿½: https://www.reunion.gouv.fr/Publications/Publications-administratives-et-legales/Recueil-des-actes-administratifs-RAA/Recueil-des-actes-administratifs-{AAAA}/{MOIS}
 
 
 
