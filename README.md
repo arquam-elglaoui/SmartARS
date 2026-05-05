@@ -48,7 +48,7 @@ pip install -r requirements.txt
 **Toujours activer l'environnement d'abord :**
 
 ```powershell
-cd "C:\Program Files\SmartARS"
+cd "C:\Dev\Source\Repos\SmartARS"
 .\env\Scripts\activate
 ```
 
