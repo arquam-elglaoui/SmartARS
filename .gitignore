@@ -43,3 +43,6 @@ SmartARS_Package/
 
 # Cursor (config locale, skills, etc.)
 .cursor/
+
+# Archives (rule data-protection : sauvegardes avant écrasement/suppression)
+_archive/
